@@ -34,7 +34,7 @@ public class AuthController {
             AuthenticationResponse token = userDetailsService.login(loginRequest.getEmail(), loginRequest.getPassword());
             return ResponseEntity.ok().body(token);
         } catch (BadCredentialsException e) {
-            AuthenticationResponse resp = AuthenticationResponse.builder().token("").message("error").build();
+            AuthenticationResponse resp = AuthenticationResponse.builder().token("").message("error").userId(null).build();
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(resp);
         } catch (Exception e) {
             throw new RuntimeException(e);

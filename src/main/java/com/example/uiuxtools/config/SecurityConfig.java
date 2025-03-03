@@ -33,6 +33,7 @@ public class SecurityConfig {
                                 .requestMatchers("/api/search").permitAll()
                                 .requestMatchers("/api/tools").permitAll()
                                 .requestMatchers("/api/user").permitAll()
+                                .requestMatchers("/api/user/**").permitAll()
 //                        .requestMatchers("/api/carsForDelearship").permitAll()
 //                        .requestMatchers("/api/user/role/dealership").hasAnyAuthority(Role.ADMIN.name())
 //                        .requestMatchers("/api/reservation/test-drive").permitAll()

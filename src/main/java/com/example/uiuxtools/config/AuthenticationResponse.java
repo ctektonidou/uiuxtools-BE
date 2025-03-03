@@ -11,11 +11,13 @@ public class AuthenticationResponse {
 
     private String token;
     private String message;
+    private Integer userId;
 
     // Constructor
-    public AuthenticationResponse(String token, String message) {
+    public AuthenticationResponse(String token, String message, Integer userId) {
         this.token = token;
         this.message = message;
+        this.userId = userId;
     }
 
     // Static builder method
@@ -27,6 +29,7 @@ public class AuthenticationResponse {
     public static class AuthenticationResponseBuilder {
         private String token;
         private String message;
+        private Integer userId;
 
         public AuthenticationResponseBuilder token(String token) {
             this.token = token;
@@ -38,8 +41,13 @@ public class AuthenticationResponse {
             return this;
         }
 
+        public AuthenticationResponseBuilder userId(Integer userId) {
+            this.userId = userId;
+            return this;
+        }
+
         public AuthenticationResponse build() {
-            return new AuthenticationResponse(token, message);
+            return new AuthenticationResponse(token, message, userId);
         }
     }
 }

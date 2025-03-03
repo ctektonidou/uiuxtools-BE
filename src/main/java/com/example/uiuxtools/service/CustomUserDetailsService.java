@@ -49,22 +49,47 @@ public class CustomUserDetailsService implements UserDetailsService {
     }
 
     public AuthenticationResponse login(String email, String password) throws Exception {
-        UserDetails userDetails = loadUserByUsername(email);
+//        UserDetails userDetails = loadUserByUsername(email);
+//
+//        // Ελέγχουμε αν το password αντιστοιχεί
+//        if (userDetails.getPassword().equals(password)) {
+//            // Αντιστοιχούμε τον ρόλο του χρήστη
+//            String role = userDetails.getAuthorities().stream()
+//                    .findFirst()
+//                    .map(authority -> authority.getAuthority())
+//                    .orElse("ROLE_UNKNOWN");
+//
+//            // Δημιουργούμε το JWT με τον ρόλο
+//
+//            String token = jwtUtil.generateToken(email, role);
+//            return AuthenticationResponse.builder().token(token).message("Welcome").userId(123).build();
+//        } else {
+//            throw new Exception("Invalid credentials");
+//        }
+        var userOpt = usersRepository.findByEmail(email);
 
-        // Ελέγχουμε αν το password αντιστοιχεί
-        if (userDetails.getPassword().equals(password)) {
-            // Αντιστοιχούμε τον ρόλο του χρήστη
-            String role = userDetails.getAuthorities().stream()
-                    .findFirst()
-                    .map(authority -> authority.getAuthority())
-                    .orElse("ROLE_UNKNOWN");
+        if (userOpt.isEmpty()) {
+            throw new UsernameNotFoundException("User not found with Email: " + email);
+        }
 
-            // Δημιουργούμε το JWT με τον ρόλο
+        var user = userOpt.get(); // ✅ Get the actual User entity
 
-            String token = jwtUtil.generateToken(email, role);
-            return AuthenticationResponse.builder().token(token).message("Welcome").build();
-        } else {
+        // Check password
+        if (!user.getPassword().equals(password)) {
             throw new Exception("Invalid credentials");
         }
+
+        // Assign role
+        String role = user.getTypeOfUser().equals(Role.ADMIN) ? "ADMIN" : "USER";
+
+        // Generate JWT token
+        String token = jwtUtil.generateToken(email, role);
+
+        // ✅ Return actual `userId`
+        return AuthenticationResponse.builder()
+                .token(token)
+                .message("Welcome")
+                .userId(user.getUserId()) // ✅ Get userId from the user entity
+                .build();
     }
 }

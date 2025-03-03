@@ -6,6 +6,7 @@ import com.example.uiuxtools.repository.UsersRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UsersService {
@@ -31,11 +32,6 @@ public class UsersService {
         return usersRepository.findByLastnameContaining(lastName);
     }
 
-    // Search user by user id
-    //    public List<Users> searchUserByUserId(Integer userId) {
-    //        return usersRepository.findByUserId(userId);
-    //    }
-
     // Search user by email
     public List<Users> searchUserByEmail(String email) {
         return usersRepository.findByEmailContaining(email);
@@ -51,8 +47,21 @@ public class UsersService {
         return usersRepository.findByUserId(userId);
     }
 
-    // Get user by email
-//    public Users getUserByEmail(String email) {
-//        return usersRepository.findByEmail(email);
-//    }
+    // Update User
+    public Users updateUser(Integer userId, Users userUpdateRequest) {
+        Optional<Users> optionalUser = usersRepository.findById(userId);
+
+        if (optionalUser.isEmpty()) {
+            throw new RuntimeException("User not found with ID: " + userId);
+        }
+
+        Users user = optionalUser.get();
+
+        // Only update allowed fields
+        user.setPassword(userUpdateRequest.getPassword());
+        user.setFirstname(userUpdateRequest.getFirstname());
+        user.setLastname(userUpdateRequest.getLastname());
+
+        return usersRepository.save(user); // Save updated user
+    }
 }
