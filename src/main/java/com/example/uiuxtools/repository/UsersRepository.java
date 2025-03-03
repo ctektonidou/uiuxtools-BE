@@ -16,8 +16,8 @@ public interface UsersRepository extends JpaRepository<Users, Integer> {
     // Custom query method to search for users by last name
     List<Users> findByLastnameContaining(String lastName);
 
-    // Custom query method to search for users by id
-    List<Users> findByUserId(Integer userId);
+    // Custom query method to search for user by id
+    Users findByUserId(Integer userId);
 
     // Custom query method to search for users by email
     List<Users> findByEmailContaining(String email);

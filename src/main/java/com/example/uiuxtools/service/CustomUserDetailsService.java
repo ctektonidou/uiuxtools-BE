@@ -2,6 +2,7 @@ package com.example.uiuxtools.service;
 
 import com.example.uiuxtools.config.AuthenticationResponse;
 import com.example.uiuxtools.config.JwtUtil;
+import com.example.uiuxtools.model.Role;
 import com.example.uiuxtools.repository.UsersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -26,16 +27,24 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        // Έλεγχος για User - na dw pws 8a ginei gia admin
+        // Έλεγχος για User - Admin
         var user = usersRepository.findByEmail(email);
         if (user.isPresent()) {
-            return new org.springframework.security.core.userdetails.User(
-                    user.get().getEmail(),
-                    user.get().getPassword(),
-                    List.of(new SimpleGrantedAuthority("USER"))
-            );
+            var userDetails = user.get();
+            if (userDetails.getTypeOfUser().equals(Role.USER)) {
+                return new org.springframework.security.core.userdetails.User(
+                        userDetails.getEmail(),
+                        userDetails.getPassword(),
+                        List.of(new SimpleGrantedAuthority("USER"))
+                );
+            } else if (userDetails.getTypeOfUser().equals(Role.ADMIN)) {
+                return new org.springframework.security.core.userdetails.User(
+                        userDetails.getEmail(),
+                        userDetails.getPassword(),
+                        List.of(new SimpleGrantedAuthority("ADMIN"))
+                );
+            }
         }
-
         throw new UsernameNotFoundException("User not found with Email: " + email);
     }
 

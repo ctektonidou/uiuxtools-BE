@@ -32,9 +32,9 @@ public class UsersService {
     }
 
     // Search user by user id
-    public List<Users> searchUserByUserId(Integer userId) {
-        return usersRepository.findByUserId(userId);
-    }
+    //    public List<Users> searchUserByUserId(Integer userId) {
+    //        return usersRepository.findByUserId(userId);
+    //    }
 
     // Search user by email
     public List<Users> searchUserByEmail(String email) {
@@ -45,4 +45,14 @@ public class UsersService {
     public List<Users> searchUserByTypeOfUser(Role typeOfUser) {
         return usersRepository.findByTypeOfUser(typeOfUser);
     }
+
+    // Get user by user id
+    public Users getUserByUserId(Integer userId) {
+        return usersRepository.findByUserId(userId);
+    }
+
+    // Get user by email
+//    public Users getUserByEmail(String email) {
+//        return usersRepository.findByEmail(email);
+//    }
 }

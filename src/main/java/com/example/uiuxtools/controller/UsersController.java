@@ -7,8 +7,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("/api/user")
 public class UsersController {
@@ -21,7 +19,12 @@ public class UsersController {
 
     // Get user by userId
     @GetMapping
-    public List<Users> getUser(@RequestBody Integer userId) {
-        return usersService.searchUserByUserId(userId);
+    public Users getUser(@RequestBody Integer userId) {
+        return usersService.getUserByUserId(userId);
     }
+
+//    @PostMapping("/userId")
+//    public Users getUserId(@RequestBody String email) {
+//        return usersService.getUserByEmail(email);
+//    }
 }
