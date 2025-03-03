@@ -1,0 +1,3 @@
+-- INSERT INTO users (email, password, lastname, firstname, role)
+-- VALUES ('admin@example.com', '<encoded-password>', 'Admin', 'User', 'ADMIN'),
+--        ('user@example.com', '<encoded-password>', 'User', 'Test', 'USER');
