@@ -1,4 +1,5 @@
 package com.example.uiuxtools.service;
+
 import com.example.uiuxtools.model.Tools;
 import com.example.uiuxtools.repository.ToolsRepository;
 import org.springframework.stereotype.Service;
@@ -37,6 +38,11 @@ public class ToolsService {
     // Search tools by id
     public List<Tools> searchTools(Integer toolId) {
         return toolsRepository.findByToolId(toolId);
+    }
+
+    // Fetch multiple tools by their IDs
+    public List<Tools> getToolsByIds(List<Integer> toolIds) {
+        return toolsRepository.findByToolIdIn(toolIds);
     }
 
 }
