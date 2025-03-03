@@ -64,4 +64,16 @@ public class UsersService {
 
         return usersRepository.save(user); // Save updated user
     }
+
+    // Create a new user
+    public Users createUser(Users userRequest) {
+        Users newUser = new Users();
+        newUser.setEmail(userRequest.getEmail());
+        newUser.setPassword(userRequest.getPassword());
+        newUser.setFirstname(userRequest.getFirstname());
+        newUser.setLastname(userRequest.getLastname());
+        newUser.setTypeOfUser(Role.USER); // Always set as USER
+
+        return usersRepository.save(newUser); // Auto-generates userId
+    }
 }
