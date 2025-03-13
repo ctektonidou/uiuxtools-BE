@@ -5,6 +5,7 @@ import com.example.uiuxtools.service.ToolsService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 //Combines @Controller and @ResponseBody, indicating that the controller returns data (e.g., JSON) directly instead of rendering a view.
@@ -46,6 +47,11 @@ public class ToolsController {
     @PostMapping("/batch")
     public List<Tools> getToolsByIds(@RequestBody List<Integer> toolIds) {
         return toolsService.getToolsByIds(toolIds);
+    }
+
+    @PostMapping("/compare")
+    public List<Map<String, Object>> getToolComparison(@RequestBody List<Integer> toolIds) {
+        return toolsService.getToolsWithFeatures(toolIds);
     }
 
 }
