@@ -1,4 +1,5 @@
 package com.example.uiuxtools.service;
+
 import com.example.uiuxtools.model.Evaluations;
 import com.example.uiuxtools.repository.EvaluationsRepository;
 import org.springframework.stereotype.Service;
@@ -16,16 +17,17 @@ public class EvaluationsService {
 
     // Fetch all evaluations
     public List<Evaluations> getAllEvaluations() {
-        return evaluationsRepository.findAll();
+        List<Evaluations> evaluations = evaluationsRepository.findAll();
+        return evaluations;
     }
 
     // Save or update an evaluation
-    public Evaluations saveEvaluation(Evaluations evaluations) {
-        return evaluationsRepository.save(evaluations);
+    public Evaluations saveEvaluation(Evaluations evaluation) {
+        return evaluationsRepository.save(evaluation);
     }
 
     // Search evaluations by user id
-    public List<Evaluations> searchEvaluationsById(Integer userId) {
+    public List<Evaluations> searchEvaluationsByUserId(Integer userId) {
         return evaluationsRepository.findByUserId(userId);
     }
 

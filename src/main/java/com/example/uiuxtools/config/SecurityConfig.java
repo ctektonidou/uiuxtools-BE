@@ -1,5 +1,6 @@
 package com.example.uiuxtools.config;
 
+import com.example.uiuxtools.model.Role;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -38,6 +39,7 @@ public class SecurityConfig {
                                 .requestMatchers("/api/tools/compare").permitAll()
                                 .requestMatchers("/api/feature/group").permitAll()
                                 .requestMatchers("/api/feature/item").permitAll()
+                                .requestMatchers("/api/evaluation").hasAnyAuthority(Role.USER.name(), Role.ADMIN.name())
 //                        .requestMatchers("/api/carsForDelearship").permitAll()
 //                        .requestMatchers("/api/user/role/dealership").hasAnyAuthority(Role.ADMIN.name())
 //                        .requestMatchers("/api/reservation/test-drive").permitAll()

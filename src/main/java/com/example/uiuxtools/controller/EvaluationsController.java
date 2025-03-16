@@ -18,7 +18,7 @@ public class EvaluationsController {
 
     // Get all evaluations for a toolId
     @GetMapping
-    public List<Evaluations> getAllEvaluationsByToolId(@RequestBody Integer toolId) {
+    public List<Evaluations> getAllEvaluationsByToolId(@RequestParam Integer toolId) {
         return evaluationsService.searchEvaluationsByToolId(toolId);
     }
 
