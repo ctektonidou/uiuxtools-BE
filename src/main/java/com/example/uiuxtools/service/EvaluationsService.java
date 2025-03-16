@@ -35,4 +35,22 @@ public class EvaluationsService {
     public List<Evaluations> searchEvaluationsByToolId(Integer toolId) {
         return evaluationsRepository.findByToolId(toolId);
     }
+
+    public double getFinalRatingByToolId(Integer toolId) {
+        List<Evaluations> evaluations = evaluationsRepository.findByToolId(toolId);
+
+        if (evaluations.isEmpty()) {
+            return 0; // If no evaluations, return 0 rating
+        }
+
+        return evaluations.stream()
+                .mapToDouble(e -> (e.getTotalRating() + e.getEasyToUse() + e.getTrueToChars()) / 3.0)
+                .average()
+                .orElse(0);
+    }
+
+    public long getReviewCountByToolId(Integer toolId) {
+        return evaluationsRepository.countByToolId(toolId); // Fetch count of evaluations
+    }
+
 }

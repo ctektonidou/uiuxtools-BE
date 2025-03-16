@@ -16,4 +16,6 @@ public interface EvaluationsRepository extends JpaRepository<Evaluations, Intege
 
     // Custom query method to search for evaluations by toolId
     List<Evaluations> findByToolId(Integer toolId);
+
+    long countByToolId(Integer toolId);
 }

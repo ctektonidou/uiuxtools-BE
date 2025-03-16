@@ -1,6 +1,7 @@
 package com.example.uiuxtools.config;
 
-import com.example.uiuxtools.model.Role;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -15,6 +16,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
+    private static final Logger logger = LoggerFactory.getLogger(SecurityConfig.class);
 
     public SecurityConfig(JwtAuthenticationFilter jwtAuthenticationFilter) {
         this.jwtAuthenticationFilter = jwtAuthenticationFilter;
@@ -27,6 +29,9 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        logger.info("Loading Security Configuration...");
+
+
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
@@ -39,7 +44,8 @@ public class SecurityConfig {
                                 .requestMatchers("/api/tools/compare").permitAll()
                                 .requestMatchers("/api/feature/group").permitAll()
                                 .requestMatchers("/api/feature/item").permitAll()
-                                .requestMatchers("/api/evaluation").hasAnyAuthority(Role.USER.name(), Role.ADMIN.name())
+                                .requestMatchers("/api/tools/searchByFeatures").permitAll()
+//                              .requestMatchers("/api/evaluation").hasAnyAuthority(Role.USER.name(), Role.ADMIN.name())
 //                        .requestMatchers("/api/carsForDelearship").permitAll()
 //                        .requestMatchers("/api/user/role/dealership").hasAnyAuthority(Role.ADMIN.name())
 //                        .requestMatchers("/api/reservation/test-drive").permitAll()
@@ -47,6 +53,9 @@ public class SecurityConfig {
                                 .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+
+        logger.info("Security Configuration Loaded: /api/searchByFeatures is public");
+
         return http.build();
     }
 }

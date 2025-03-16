@@ -91,4 +91,8 @@ public class ToolsService {
         return result;
     }
 
+    public List<Tools> getToolsByFeatureItems(List<Integer> featureItemIds) {
+        List<Integer> toolIds = relationRepository.findToolIdsWithAllMatchingIds(featureItemIds, featureItemIds.size());
+        return toolsRepository.findByToolIdIn(toolIds);
+    }
 }

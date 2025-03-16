@@ -51,4 +51,60 @@ public class Evaluations {
     public Double getFinalRating() {
         return (totalRating + easyToUse + trueToChars) / 3.0;
     }
+
+    public Integer getEvaluationId() {
+        return evaluationId;
+    }
+
+    public void setEvaluationId(Integer evaluationId) {
+        this.evaluationId = evaluationId;
+    }
+
+    public Integer getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Integer userId) {
+        this.userId = userId;
+    }
+
+    public Integer getToolId() {
+        return toolId;
+    }
+
+    public void setToolId(Integer toolId) {
+        this.toolId = toolId;
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
+
+    public Integer getEasyToUse() {
+        return easyToUse;
+    }
+
+    public void setEasyToUse(Integer easyToUse) {
+        this.easyToUse = easyToUse;
+    }
+
+    public Integer getTrueToChars() {
+        return trueToChars;
+    }
+
+    public void setTrueToChars(Integer trueToChars) {
+        this.trueToChars = trueToChars;
+    }
+
+    public Integer getTotalRating() {
+        return totalRating;
+    }
+
+    public void setTotalRating(Integer totalRating) {
+        this.totalRating = totalRating;
+    }
 }
