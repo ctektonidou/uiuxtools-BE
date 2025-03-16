@@ -9,7 +9,13 @@ import com.example.uiuxtools.repository.FeatureItemRepository;
 import com.example.uiuxtools.repository.RelationRepository;
 import com.example.uiuxtools.repository.ToolsRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -34,11 +40,6 @@ public class ToolsService {
     // Fetch all tools
     public List<Tools> getAllTools() {
         return toolsRepository.findAll();
-    }
-
-    // Save or update a tool
-    public Tools saveTool(Tools tools) {
-        return toolsRepository.save(tools);
     }
 
     // Delete a tool by ID
@@ -95,4 +96,56 @@ public class ToolsService {
         List<Integer> toolIds = relationRepository.findToolIdsWithAllMatchingIds(featureItemIds, featureItemIds.size());
         return toolsRepository.findByToolIdIn(toolIds);
     }
+
+    public Tools saveTool(Tools tool) {
+        return toolsRepository.save(tool);
+    }
+
+    // Method to save the image
+    public String saveImage(MultipartFile file) throws IOException {
+        String uploadDir = "uploads/";
+        File uploadFolder = new File(uploadDir);
+
+        if (!uploadFolder.exists()) {
+            uploadFolder.mkdirs(); // Create the uploads directory if it doesn't exist
+        }
+
+        String fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
+        File destinationFile = new File(uploadDir + fileName);
+        Files.copy(file.getInputStream(), Paths.get(destinationFile.getAbsolutePath()), StandardCopyOption.REPLACE_EXISTING);
+
+        return "/uploads/" + fileName; // Return URL for frontend
+    }
+
+    public void addToolFeatureRelation(Integer toolId, Integer featureItemId) {
+        Relation relation = new Relation();
+        relation.setIdTool(toolId);
+        relation.setIdFeatureItem(featureItemId);
+        relationRepository.save(relation);
+    }
+
+    public String saveBase64Image(String base64) {
+        try {
+            String uploadDir = "uploads/";
+            File uploadFolder = new File(uploadDir);
+            if (!uploadFolder.exists()) {
+                uploadFolder.mkdirs(); // Create uploads directory if it doesn't exist
+            }
+
+            // Extract Base64 data
+            String base64Data = base64.split(",")[1]; // Remove "data:image/png;base64," prefix
+            byte[] decodedBytes = java.util.Base64.getDecoder().decode(base64Data);
+
+            // Generate a unique filename
+            String fileName = System.currentTimeMillis() + ".png";
+            File imageFile = new File(uploadDir + fileName);
+            Files.write(Paths.get(imageFile.getAbsolutePath()), decodedBytes);
+
+            return "/uploads/" + fileName; // Return URL for frontend
+        } catch (Exception e) {
+            throw new RuntimeException("Error saving Base64 image", e);
+        }
+    }
+
+
 }

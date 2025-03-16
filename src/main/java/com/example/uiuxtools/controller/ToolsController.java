@@ -5,6 +5,7 @@ import com.example.uiuxtools.service.EvaluationsService;
 import com.example.uiuxtools.service.ToolsService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -32,12 +33,6 @@ public class ToolsController {
     @GetMapping
     public List<Tools> getAllTools() {
         return toolsService.getAllTools();
-    }
-
-    // Add a new tool
-    @PostMapping
-    public Tools addTool(@RequestBody Tools tools) {
-        return toolsService.saveTool(tools);
     }
 
     // Delete a tool by ID
@@ -90,4 +85,34 @@ public class ToolsController {
             return toolData;
         }).collect(Collectors.toList());
     }
+
+    // Create a new tool with image upload
+    @PostMapping
+    public ResponseEntity<Tools> addTool(@RequestBody Map<String, Object> toolData) {
+        Tools tool = new Tools();
+        tool.setToolname((String) toolData.get("name"));
+        tool.setDescription((String) toolData.get("description"));
+        tool.setLink((String) toolData.get("productLink"));
+
+        // Handle Base64 Image
+        String base64Image = (String) toolData.get("image");
+        if (base64Image != null && !base64Image.isEmpty()) {
+            String imageUrl = toolsService.saveBase64Image(base64Image);
+            tool.setImage(imageUrl);
+        }
+
+        // Save tool and get the generated ID
+        Tools savedTool = toolsService.saveTool(tool);
+
+        // Parse and process feature item IDs
+        List<Integer> featureItemIds = (List<Integer>) toolData.get("featureItemIds");
+        if (featureItemIds != null) {
+            for (Integer featureItemId : featureItemIds) {
+                toolsService.addToolFeatureRelation(savedTool.getToolId(), featureItemId);
+            }
+        }
+
+        return ResponseEntity.ok(savedTool);
+    }
+
 }
