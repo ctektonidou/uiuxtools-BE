@@ -115,4 +115,16 @@ public class ToolsController {
         return ResponseEntity.ok(savedTool);
     }
 
+    @GetMapping("/{id}/details")
+    public ResponseEntity<Map<String, Object>> getToolWithFeatures(@PathVariable("id") Integer toolId) {
+        List<Map<String, Object>> toolList = toolsService.getToolsWithFeatures(List.of(toolId));
+
+        if (toolList.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity.ok(toolList.get(0)); // return only one tool
+    }
+
+
 }

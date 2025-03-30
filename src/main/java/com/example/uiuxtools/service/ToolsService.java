@@ -27,14 +27,16 @@ public class ToolsService {
     private final RelationRepository relationRepository;
     private final FeatureItemRepository featureItemRepository;
     private final FeatureGroupRepository featureGroupRepository;
+    private final EvaluationsService evaluationsService;
 
     // Constructor-based Dependency Injection
     public ToolsService(ToolsRepository toolsRepository, RelationRepository relationRepository,
-                        FeatureItemRepository featureItemRepository, FeatureGroupRepository featureGroupRepository) {
+                        FeatureItemRepository featureItemRepository, FeatureGroupRepository featureGroupRepository, EvaluationsService evaluationsService) {
         this.toolsRepository = toolsRepository;
         this.relationRepository = relationRepository;
         this.featureItemRepository = featureItemRepository;
         this.featureGroupRepository = featureGroupRepository;
+        this.evaluationsService = evaluationsService;
     }
 
     // Fetch all tools
@@ -70,6 +72,14 @@ public class ToolsService {
             Map<String, Object> toolDetails = new HashMap<>();
             toolDetails.put("toolId", tool.getToolId());
             toolDetails.put("toolName", tool.getToolname());
+            toolDetails.put("description", tool.getDescription());
+            toolDetails.put("link", tool.getLink());
+            toolDetails.put("image", tool.getImage());
+
+            double finalRating = evaluationsService.getFinalRatingByToolId(tool.getToolId());
+            long reviewCount = evaluationsService.getReviewCountByToolId(tool.getToolId());
+            toolDetails.put("finalRating", finalRating);
+            toolDetails.put("reviewCount", reviewCount);
 
             List<Relation> relations = relationRepository.findByIdTool(tool.getToolId());
             List<Map<String, String>> features = new ArrayList<>();
@@ -146,6 +156,5 @@ public class ToolsService {
             throw new RuntimeException("Error saving Base64 image", e);
         }
     }
-
 
 }

@@ -2,6 +2,7 @@ package com.example.uiuxtools.service;
 
 import com.example.uiuxtools.model.Evaluations;
 import com.example.uiuxtools.repository.EvaluationsRepository;
+import com.example.uiuxtools.repository.UsersRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -9,10 +10,12 @@ import java.util.List;
 @Service
 public class EvaluationsService {
     private final EvaluationsRepository evaluationsRepository;
+    private final UsersRepository usersRepository;
 
     // Constructor-based Dependency Injection
-    public EvaluationsService(EvaluationsRepository evaluationsRepository) {
+    public EvaluationsService(EvaluationsRepository evaluationsRepository, UsersRepository usersRepository) {
         this.evaluationsRepository = evaluationsRepository;
+        this.usersRepository = usersRepository;
     }
 
     // Fetch all evaluations
@@ -51,6 +54,12 @@ public class EvaluationsService {
 
     public long getReviewCountByToolId(Integer toolId) {
         return evaluationsRepository.countByToolId(toolId); // Fetch count of evaluations
+    }
+
+    public String getUserNameById(Integer userId) {
+        return usersRepository.findById(userId)
+                .map(user -> user.getFirstname() + " " + user.getLastname())
+                .orElse("Unknown");
     }
 
 }
