@@ -22,7 +22,10 @@ public interface RelationRepository extends JpaRepository<Relation, Integer> {
     @Query("SELECT r.idTool FROM Relation r WHERE r.idFeatureItem IN :ids GROUP BY r.idTool HAVING COUNT(DISTINCT r.idFeatureItem) = :size")
         //eixe ena id edw pou den kserw ti itane
     List<Integer> findToolIdsWithAllMatchingIds(@Param("ids") List<Integer> ids, @Param("size") long size);
-//    r.id IN :ids: Filters rows where id matches any value in the input list.
+
+    //    r.id IN :ids: Filters rows where id matches any value in the input list.
 //    GROUP BY r.toolId: Groups the rows by toolId.
 //    HAVING COUNT(DISTINCT r.id) = :size: Ensures that each toolId is associated with all id values in the input list. The size parameter is the length of the input ids array.
+    void deleteByIdTool(Integer idTool);
+
 }

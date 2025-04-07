@@ -16,10 +16,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class ToolsService {
@@ -155,6 +153,66 @@ public class ToolsService {
         } catch (Exception e) {
             throw new RuntimeException("Error saving Base64 image", e);
         }
+    }
+
+    public Optional<Map<String, Object>> getToolEditData(Integer toolId) {
+        Tools tool = toolsRepository.findById(toolId).orElse(null);
+        if (tool == null) return Optional.empty();
+
+        Map<String, Object> toolData = new HashMap<>();
+        toolData.put("name", tool.getToolname());
+        toolData.put("description", tool.getDescription());
+        toolData.put("productLink", tool.getLink());
+        toolData.put("imageUrl", tool.getImage());
+
+        // Get selected feature item IDs
+        List<Relation> relations = relationRepository.findByIdTool(toolId);
+        List<Integer> featureItemIds = relations.stream()
+                .map(Relation::getIdFeatureItem)
+                .collect(Collectors.toList());
+
+        toolData.put("featureItemIds", featureItemIds);
+        return Optional.of(toolData);
+    }
+
+    public Tools getToolById(Integer toolId) {
+        return toolsRepository.findById(toolId).orElse(null);
+    }
+
+    public List<Integer> getFeatureItemIdsByToolId(Integer toolId) {
+        return relationRepository.findByIdTool(toolId)
+                .stream()
+                .map(Relation::getIdFeatureItem)
+                .collect(Collectors.toList());
+    }
+
+    public Optional<Tools> updateTool(Integer toolId, Map<String, Object> toolData) {
+        Tools tool = toolsRepository.findById(toolId).orElse(null);
+        if (tool == null) return Optional.empty();
+
+        tool.setToolname((String) toolData.get("name"));
+        tool.setDescription((String) toolData.get("description"));
+        tool.setLink((String) toolData.get("productLink"));
+
+        // Handle optional image update
+        String base64Image = (String) toolData.get("image");
+        if (base64Image != null && !base64Image.isEmpty() && base64Image.startsWith("data:image")) {
+            String imageUrl = saveBase64Image(base64Image);
+            tool.setImage(imageUrl);
+        }
+
+        Tools updatedTool = toolsRepository.save(tool);
+
+        // Update feature item relations
+        List<Integer> newFeatureItemIds = (List<Integer>) toolData.get("featureItemIds");
+        if (newFeatureItemIds != null) {
+            relationRepository.deleteByIdTool(toolId);
+            for (Integer featureItemId : newFeatureItemIds) {
+                addToolFeatureRelation(toolId, featureItemId);
+            }
+        }
+
+        return Optional.of(updatedTool);
     }
 
 }

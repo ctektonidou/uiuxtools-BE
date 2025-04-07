@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -35,6 +36,7 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
+                                .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                                 .requestMatchers("/auth/**").permitAll()
                                 .requestMatchers("/api/search").permitAll()
                                 .requestMatchers("/api/tools").permitAll()
@@ -48,6 +50,9 @@ public class SecurityConfig {
                                 .requestMatchers("/api/tools/*/details").permitAll()
                                 .requestMatchers("/uploads/**").permitAll()
                                 .requestMatchers("/api/evaluation").permitAll()
+                                .requestMatchers("/api/tools/*/edit").permitAll()
+                                .requestMatchers(HttpMethod.PUT, "/api/tools/**").permitAll()
+                                .requestMatchers("/api/tools/**").permitAll()
 //                              .requestMatchers("/api/evaluation").hasAnyAuthority(Role.USER.name(), Role.ADMIN.name())
 //                        .requestMatchers("/api/carsForDelearship").permitAll()
 //                        .requestMatchers("/api/user/role/dealership").hasAnyAuthority(Role.ADMIN.name())

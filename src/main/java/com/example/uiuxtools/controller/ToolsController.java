@@ -126,5 +126,29 @@ public class ToolsController {
         return ResponseEntity.ok(toolList.get(0)); // return only one tool
     }
 
+    @GetMapping("/{id}/edit")
+    public ResponseEntity<Map<String, Object>> getToolEditData(@PathVariable("id") Integer toolId) {
+        Tools tool = toolsService.getToolById(toolId);
+        if (tool == null) {
+            return ResponseEntity.notFound().build();
+        }
 
+        List<Integer> featureItemIds = toolsService.getFeatureItemIdsByToolId(toolId);
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("name", tool.getToolname());
+        response.put("description", tool.getDescription());
+        response.put("productLink", tool.getLink());
+        response.put("image", tool.getImage());
+        response.put("featureItemIds", featureItemIds);
+
+        return ResponseEntity.ok(response);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Tools> updateTool(@PathVariable("id") Integer toolId, @RequestBody Map<String, Object> toolData) {
+        return toolsService.updateTool(toolId, toolData)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
 }
