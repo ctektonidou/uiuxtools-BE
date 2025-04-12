@@ -206,7 +206,7 @@ public class ToolsService {
         // Update feature item relations
         List<Integer> newFeatureItemIds = (List<Integer>) toolData.get("featureItemIds");
         if (newFeatureItemIds != null) {
-            relationRepository.deleteByIdTool(toolId);
+            relationRepository.deleteByToolId(toolId);
             for (Integer featureItemId : newFeatureItemIds) {
                 addToolFeatureRelation(toolId, featureItemId);
             }

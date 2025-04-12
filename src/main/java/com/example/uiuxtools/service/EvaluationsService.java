@@ -43,13 +43,14 @@ public class EvaluationsService {
         List<Evaluations> evaluations = evaluationsRepository.findByToolId(toolId);
 
         if (evaluations.isEmpty()) {
-            return 0; // If no evaluations, return 0 rating
+            return 0;
         }
 
         return evaluations.stream()
+                .filter(e -> e.getTotalRating() != null && e.getEasyToUse() != null && e.getTrueToChars() != null) // ✅ filter nulls
                 .mapToDouble(e -> (e.getTotalRating() + e.getEasyToUse() + e.getTrueToChars()) / 3.0)
                 .average()
-                .orElse(0);
+                .orElse(0); // fallback if all filtered out
     }
 
     public long getReviewCountByToolId(Integer toolId) {

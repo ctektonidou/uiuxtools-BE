@@ -2,9 +2,11 @@ package com.example.uiuxtools.repository;
 
 import com.example.uiuxtools.model.Relation;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -26,6 +28,10 @@ public interface RelationRepository extends JpaRepository<Relation, Integer> {
     //    r.id IN :ids: Filters rows where id matches any value in the input list.
 //    GROUP BY r.toolId: Groups the rows by toolId.
 //    HAVING COUNT(DISTINCT r.id) = :size: Ensures that each toolId is associated with all id values in the input list. The size parameter is the length of the input ids array.
-    void deleteByIdTool(Integer idTool);
+    
+    @Transactional
+    @Modifying
+    @Query("DELETE FROM Relation r WHERE r.idTool = :toolId")
+    void deleteByToolId(@Param("toolId") Integer toolId);
 
 }
