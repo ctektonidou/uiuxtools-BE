@@ -26,15 +26,23 @@ public class ToolsService {
     private final FeatureItemRepository featureItemRepository;
     private final FeatureGroupRepository featureGroupRepository;
     private final EvaluationsService evaluationsService;
+    private final FavoriteToolsService favoriteToolsService;
 
     // Constructor-based Dependency Injection
-    public ToolsService(ToolsRepository toolsRepository, RelationRepository relationRepository,
-                        FeatureItemRepository featureItemRepository, FeatureGroupRepository featureGroupRepository, EvaluationsService evaluationsService) {
+    public ToolsService(
+            ToolsRepository toolsRepository,
+            RelationRepository relationRepository,
+            FeatureItemRepository featureItemRepository,
+            FeatureGroupRepository featureGroupRepository,
+            EvaluationsService evaluationsService,
+            FavoriteToolsService favoriteToolsService
+    ) {
         this.toolsRepository = toolsRepository;
         this.relationRepository = relationRepository;
         this.featureItemRepository = featureItemRepository;
         this.featureGroupRepository = featureGroupRepository;
         this.evaluationsService = evaluationsService;
+        this.favoriteToolsService = favoriteToolsService;
     }
 
     // Fetch all tools
@@ -44,6 +52,10 @@ public class ToolsService {
 
     // Delete a tool by ID
     public void deleteTool(Integer toolId) {
+        // Clean up favorites related to the tool
+        favoriteToolsService.removeFavoritesByToolId(toolId);
+
+        // Delete the tool itself
         toolsRepository.deleteById(toolId);
     }
 

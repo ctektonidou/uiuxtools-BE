@@ -51,4 +51,40 @@ public class EvaluationsController {
     public Evaluations addEvaluation(@RequestBody Evaluations evaluation) {
         return evaluationsService.saveEvaluation(evaluation);
     }
+
+    @DeleteMapping("/{id}")
+    public void deleteEvaluation(@PathVariable Integer id) {
+        evaluationsService.deleteEvaluationById(id);
+    }
+
+    @PutMapping("/{id}")
+    public Evaluations updateEvaluation(@PathVariable Integer id, @RequestBody Evaluations evaluation) {
+        evaluation.setEvaluationId(id);
+        return evaluationsService.saveEvaluation(evaluation);
+    }
+
+    @GetMapping("/user/{userId}")
+    public List<Map<String, Object>> getEvaluationsByUserId(@PathVariable Integer userId) {
+        List<Evaluations> evaluations = evaluationsService.searchEvaluationsByUserId(userId);
+        List<Map<String, Object>> response = new ArrayList<>();
+
+        for (Evaluations eval : evaluations) {
+            Map<String, Object> evalData = new HashMap<>();
+            evalData.put("evaluationId", eval.getEvaluationId());
+            evalData.put("userId", eval.getUserId());
+            evalData.put("toolId", eval.getToolId());
+            evalData.put("comment", eval.getComment());
+            evalData.put("easyToUse", eval.getEasyToUse());
+            evalData.put("trueToChars", eval.getTrueToChars());
+            evalData.put("totalRating", eval.getTotalRating());
+            evalData.put("finalRating", eval.getFinalRating());
+
+            // Optional: include tool name here for convenience
+            evalData.put("toolName", evaluationsService.getToolNameById(eval.getToolId()));
+
+            response.add(evalData);
+        }
+
+        return response;
+    }
 }

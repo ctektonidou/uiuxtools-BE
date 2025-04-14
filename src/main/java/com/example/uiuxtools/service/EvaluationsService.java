@@ -2,6 +2,7 @@ package com.example.uiuxtools.service;
 
 import com.example.uiuxtools.model.Evaluations;
 import com.example.uiuxtools.repository.EvaluationsRepository;
+import com.example.uiuxtools.repository.ToolsRepository;
 import com.example.uiuxtools.repository.UsersRepository;
 import org.springframework.stereotype.Service;
 
@@ -11,11 +12,13 @@ import java.util.List;
 public class EvaluationsService {
     private final EvaluationsRepository evaluationsRepository;
     private final UsersRepository usersRepository;
+    private final ToolsRepository toolsRepository;
 
     // Constructor-based Dependency Injection
-    public EvaluationsService(EvaluationsRepository evaluationsRepository, UsersRepository usersRepository) {
+    public EvaluationsService(EvaluationsRepository evaluationsRepository, UsersRepository usersRepository, ToolsRepository toolsRepository) {
         this.evaluationsRepository = evaluationsRepository;
         this.usersRepository = usersRepository;
+        this.toolsRepository = toolsRepository;
     }
 
     // Fetch all evaluations
@@ -63,4 +66,13 @@ public class EvaluationsService {
                 .orElse("Unknown");
     }
 
+    public void deleteEvaluationById(Integer id) {
+        evaluationsRepository.deleteById(id);
+    }
+
+    public String getToolNameById(Integer toolId) {
+        return toolsRepository.findById(toolId)
+                .map(tool -> tool.getToolname())
+                .orElse("Unknown Tool");
+    }
 }
