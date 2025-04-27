@@ -52,6 +52,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/evaluation/**").permitAll()
                         .requestMatchers("/api/evaluation/user/**").permitAll()
                         .requestMatchers("/api/favorites/**").permitAll()
+                        .requestMatchers(HttpMethod.DELETE, "/api/favorites/**").permitAll()
                         .requestMatchers("/api/tools/*/edit").permitAll()
                         .requestMatchers(HttpMethod.PUT, "/api/tools/**").hasAuthority("ADMIN")
                         .requestMatchers("/api/tools/**").permitAll()

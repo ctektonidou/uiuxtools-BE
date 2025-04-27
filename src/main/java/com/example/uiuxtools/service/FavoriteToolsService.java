@@ -2,6 +2,7 @@ package com.example.uiuxtools.service;
 
 import com.example.uiuxtools.model.FavoriteTool;
 import com.example.uiuxtools.repository.FavoriteToolsRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -37,6 +38,7 @@ public class FavoriteToolsService {
     }
 
     // 4. Remove from favorites
+    @Transactional
     public void removeFavorite(Integer userId, Integer toolId) {
         favoriteToolsRepository.deleteByUserIdAndToolId(userId, toolId);
     }

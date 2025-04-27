@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 @Entity
-@Table(name = "favorite_tools", uniqueConstraints = {@UniqueConstraint(columnNames = {"user_id", "tool_id"})})
+@Table(name = "favoritetools", uniqueConstraints = {@UniqueConstraint(columnNames = {"user_id", "tool_id"})})
 @Data
 public class FavoriteTool {
 
