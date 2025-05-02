@@ -53,10 +53,10 @@ public class SecurityConfig {
                         .requestMatchers("/api/evaluation/user/**").permitAll()
                         .requestMatchers("/api/favorites/**").permitAll()
                         .requestMatchers(HttpMethod.DELETE, "/api/favorites/**").permitAll()
-                        .requestMatchers("/api/tools/*/edit").permitAll()
-                        .requestMatchers(HttpMethod.PUT, "/api/tools/**").hasAuthority("ADMIN")
-                        .requestMatchers("/api/tools/**").permitAll()
+                        .requestMatchers(HttpMethod.PUT, "/api/tools/**").permitAll()
                         .requestMatchers(HttpMethod.DELETE, "/api/tools/**").hasAuthority("ADMIN")
+                        .requestMatchers("/api/tools/*/edit").permitAll()
+                        .requestMatchers("/api/tools/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);

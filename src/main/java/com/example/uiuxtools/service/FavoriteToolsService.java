@@ -44,6 +44,7 @@ public class FavoriteToolsService {
     }
 
     //5. Cleanup favorites when tool is deleted
+    @Transactional
     public void removeFavoritesByToolId(Integer toolId) {
         favoriteToolsRepository.deleteByToolId(toolId);
     }

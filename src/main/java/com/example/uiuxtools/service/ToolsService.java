@@ -8,6 +8,7 @@ import com.example.uiuxtools.repository.FeatureGroupRepository;
 import com.example.uiuxtools.repository.FeatureItemRepository;
 import com.example.uiuxtools.repository.RelationRepository;
 import com.example.uiuxtools.repository.ToolsRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -51,6 +52,7 @@ public class ToolsService {
     }
 
     // Delete a tool by ID
+    @Transactional
     public void deleteTool(Integer toolId) {
         // Clean up favorites related to the tool
         favoriteToolsService.removeFavoritesByToolId(toolId);
@@ -198,6 +200,7 @@ public class ToolsService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional
     public Optional<Tools> updateTool(Integer toolId, Map<String, Object> toolData) {
         Tools tool = toolsRepository.findById(toolId).orElse(null);
         if (tool == null) return Optional.empty();
