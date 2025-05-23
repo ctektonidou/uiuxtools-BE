@@ -65,24 +65,30 @@ public class EvaluationsController {
 
     @GetMapping("/user/{userId}")
     public List<Map<String, Object>> getEvaluationsByUserId(@PathVariable Integer userId) {
+        System.out.println("Fetching evaluations for userId: " + userId);
         List<Evaluations> evaluations = evaluationsService.searchEvaluationsByUserId(userId);
+        System.out.println("Found evaluations: " + evaluations.size());
         List<Map<String, Object>> response = new ArrayList<>();
 
         for (Evaluations eval : evaluations) {
-            Map<String, Object> evalData = new HashMap<>();
-            evalData.put("evaluationId", eval.getEvaluationId());
-            evalData.put("userId", eval.getUserId());
-            evalData.put("toolId", eval.getToolId());
-            evalData.put("comment", eval.getComment());
-            evalData.put("easyToUse", eval.getEasyToUse());
-            evalData.put("trueToChars", eval.getTrueToChars());
-            evalData.put("totalRating", eval.getTotalRating());
-            evalData.put("finalRating", eval.getFinalRating());
+            try {
+                Map<String, Object> evalData = new HashMap<>();
+                evalData.put("evaluationId", eval.getEvaluationId());
+                evalData.put("userId", eval.getUserId());
+                evalData.put("toolId", eval.getToolId());
+                evalData.put("comment", eval.getComment());
+                evalData.put("easyToUse", eval.getEasyToUse());
+                evalData.put("trueToChars", eval.getTrueToChars());
+                evalData.put("totalRating", eval.getTotalRating());
+                evalData.put("finalRating", eval.getFinalRating());
 
-            // Optional: include tool name here for convenience
-            evalData.put("toolName", evaluationsService.getToolNameById(eval.getToolId()));
+                // Optional: include tool name here for convenience
+                evalData.put("toolName", evaluationsService.getToolNameById(eval.getToolId()));
 
-            response.add(evalData);
+                response.add(evalData);
+            } catch (Exception e) {
+                e.printStackTrace(); // log the exact cause
+            }
         }
 
         return response;

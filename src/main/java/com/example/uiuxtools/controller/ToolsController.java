@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+@CrossOrigin(origins = "*") // allow all origins
 @RestController
 //Combines @Controller and @ResponseBody, indicating that the controller returns data (e.g., JSON) directly instead of rendering a view.
 @RequestMapping("/api/tools")

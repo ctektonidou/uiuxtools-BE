@@ -3,12 +3,12 @@ package com.example.uiuxtools.model;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "FeatureGroup")
+@Table(name = "featuregroup")
 public class FeatureGroup {
 
     @Id // Marks this field as the primary key
     @GeneratedValue(strategy = GenerationType.IDENTITY) // Auto-increment for primary key
-    @Column(name= "Id", nullable = false)
+    @Column(name = "Id", nullable = false)
     private Integer customId;
 
     @Column(name = "Name", nullable = false, length = 255)

@@ -3,7 +3,7 @@ package com.example.uiuxtools.model;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "Tools")
+@Table(name = "tools")
 public class Tools {
 
     @Id // Marks this field as the primary key

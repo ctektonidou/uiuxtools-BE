@@ -10,7 +10,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -37,7 +36,9 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                        .requestMatchers("/**").permitAll()
                         .requestMatchers("/auth/**").permitAll()
+                        .requestMatchers("/api/**").permitAll()
                         .requestMatchers("/api/search").permitAll()
                         .requestMatchers("/api/tools").permitAll()
                         .requestMatchers("/api/user").permitAll()
@@ -58,8 +59,8 @@ public class SecurityConfig {
                         .requestMatchers("/api/tools/*/edit").permitAll()
                         .requestMatchers("/api/tools/**").permitAll()
                         .anyRequest().authenticated()
-                )
-                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+                );
+//                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         logger.info("Security Configuration Loaded: /api/searchByFeatures is public");
 

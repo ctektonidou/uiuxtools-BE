@@ -15,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.*;
@@ -125,7 +126,7 @@ public class ToolsService {
 
     // Method to save the image
     public String saveImage(MultipartFile file) throws IOException {
-        String uploadDir = "uploads/";
+        String uploadDir = "/opt/uiux/uploads/";
         File uploadFolder = new File(uploadDir);
 
         if (!uploadFolder.exists()) {
@@ -133,7 +134,8 @@ public class ToolsService {
         }
 
         String fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
-        File destinationFile = new File(uploadDir + fileName);
+        Path destinationPath = Paths.get(uploadDir, fileName);
+        File destinationFile = destinationPath.toFile();
         Files.copy(file.getInputStream(), Paths.get(destinationFile.getAbsolutePath()), StandardCopyOption.REPLACE_EXISTING);
 
         return "/uploads/" + fileName; // Return URL for frontend
@@ -148,7 +150,7 @@ public class ToolsService {
 
     public String saveBase64Image(String base64) {
         try {
-            String uploadDir = "uploads/";
+            String uploadDir = "/opt/uiux/uploads/";
             File uploadFolder = new File(uploadDir);
             if (!uploadFolder.exists()) {
                 uploadFolder.mkdirs(); // Create uploads directory if it doesn't exist

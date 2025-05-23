@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 
 @Entity
 @IdClass(RelationId.class) // Specify the composite key class
-@Table(name = "Relation")
+@Table(name = "relation")
 public class Relation {
 
     @Id
@@ -33,7 +33,8 @@ public class Relation {
     }
 
     // Constructor
-    public Relation() {}
+    public Relation() {
+    }
 
     public Relation(Integer idTool, Integer idFeatureItem) {
         this.idTool = idTool;

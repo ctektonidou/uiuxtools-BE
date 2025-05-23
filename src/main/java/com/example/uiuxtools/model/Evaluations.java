@@ -5,7 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "Evaluations")
+@Table(name = "evaluations")
 @Data // Lombok automatically generates Getters, Setters, toString(), etc.
 @NoArgsConstructor
 public class Evaluations {
